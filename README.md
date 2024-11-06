@@ -1,6 +1,4 @@
-# floemin mobile version
-
-A new Flutter project.
+# Floemin mobile version
 
 ## Tugas 7: Elemen Dasar Flutter
 
@@ -36,14 +34,3 @@ Final adalah nilai yang bisa diketahui pada saat runtime dan tidak dapat diubah 
 - membuat program flutter baru dangan tema Floemin: saya menjalankan flutter create. Setelah proyek Flutter telah terbuat, saya menambahkan file menu.dart dan menuliskan kode di dalamnya
 - membuat tiga tombol: dengan cara membuat list of ItemHomepage yang berisi tombol-tombol disertai dengan warna yang saya inginkan. Setelah itu, saya membuat class ItemHomepage yang memiliki atribut nama, icon, dan warna.
 -  Memunculkan Snackbar: implementasi snackbar dengan menggunakan InkWell onTap sehingga ketika tombol diklik akan muncul snackbar yang sesuai dengan tombol yang diklik
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
