@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:floemin/menu.dart';
+import 'package:floemin/screens/menu.dart';
 
 void main() {
   runApp(const MyApp());
