@@ -146,7 +146,7 @@ class _FlowerEntryFormPageState extends State<FlowerEntryFormPage> {
           },
           child: const Text(
             "Save",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white),            
           ),
         ),
       ),
