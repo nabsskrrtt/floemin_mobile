@@ -1,7 +1,5 @@
 # floemin mobile version
 
-A new Flutter project.
-
 ## Tugas 7: Elemen Dasar Flutter
 
 1. Jelaskan apa yang dimaksud dengan stateless widget dan stateful widget, dan jelaskan perbedaan dari keduanya!
@@ -37,13 +35,76 @@ Final adalah nilai yang bisa diketahui pada saat runtime dan tidak dapat diubah 
 - membuat tiga tombol: dengan cara membuat list of ItemHomepage yang berisi tombol-tombol disertai dengan warna yang saya inginkan. Setelah itu, saya membuat class ItemHomepage yang memiliki atribut nama, icon, dan warna.
 -  Memunculkan Snackbar: implementasi snackbar dengan menggunakan InkWell onTap sehingga ketika tombol diklik akan muncul snackbar yang sesuai dengan tombol yang diklik
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. Apa kegunaan const di Flutter? Jelaskan apa keuntungan ketika menggunakan const pada kode Flutter. Kapan sebaiknya kita menggunakan const, dan kapan sebaiknya tidak digunakan?
+const digunakan untuk membuat objek yang nilainya konstan yang artinya objek tersebut tidah berubah saat compile time. Menggunakan const menguntungkan karena dapat mempercepat build time. Hal ini karena widget const hanya dibuat sekali dan disimpan di cache sehingga setiap build time, tidak perlu membuat widget baru. 
+const digunakan saat:
+- ingin membuat widget yang nilainya tidak berubah (statis)
+- pada nilai literal seperti strings dan numbers
+- pada widget yang child-nya juga const. const tidak digunakan saat
+const tidak digunakan saat:
+- ingin membuat widget yang nilainya dinamis
+- widget yang stateful
+- widget yang menggunakan data dari API/Database
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+2. Jelaskan dan bandingkan penggunaan Column dan Row pada Flutter. Berikan contoh implementasi dari masing-masing layout widget ini!
+Perbedaan utamanya adalah Column menyusun child widgets secara vertikal sedangkan Row secara horizontal. 
+implementasi column:
+Column(
+  children: [
+    Text('Item 1'),
+    Text('Item 2'),
+    Text('Item 3'),
+  ],
+)
+implementasi row:
+Row(
+  children: [
+    Text('Item 1'),
+    Text('Item 2'), 
+    Text('Item 3'),
+  ],
+)
+
+3. Sebutkan apa saja elemen input yang kamu gunakan pada halaman form yang kamu buat pada tugas kali ini. Apakah terdapat elemen input Flutter lain yang tidak kamu gunakan pada tugas ini? Jelaskan!
+Input yang digunakan pada flowerentry_form.dart adalah TextFormField sebanyak 3 buah untuk mengambil input nama bunga(string), deskripsi bunga(string), dan harga bunga(integer). Masing-masing field tersebut dilengkapi dengan dekorasi, yaitu hintText, labelText, dan border. Selain itu, ada juga validator input kosong, onChanged handler untuk mengupdate state, dan khusus field harga ada validasi input harus angka.
+Elemen input Flutter lain yang tidak digunakan:
+- Checkbox (untuk hal yg menawarkan 2 opsi)
+- Radio (untuk memilih kategori)
+- DropdownButton
+- DateTimePicker
+
+4. Bagaimana cara kamu mengatur tema (theme) dalam aplikasi Flutter agar aplikasi yang dibuat konsisten? Apakah kamu mengimplementasikan tema pada aplikasi yang kamu buat?
+Dengan menerapkan kode berikut pada main.dart. 
+MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.deepPurple,
+        ).copyWith(secondary: Colors.deepPurple[400]),
+      ),
+      home: MyHomePage(),
+    );
+
+Berikutnya mengakses warna primary dan secondary tersebut sesuai kebutuhan dengan cara:
+
+// Mengakses warna primary
+Theme.of(context).colorScheme.primary
+
+// Mengakses warna secondary
+Theme.of(context).colorScheme.secondary
+
+5. Bagaimana cara kamu menangani navigasi dalam aplikasi dengan banyak halaman pada Flutter?
+
+contohnya pada left_drawer.dart:
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyHomePage(),
+    ));
+yang terjadi pada blok kode ini adalah:
+- Mengganti halaman saat ini dengan halaman baru (MyHomePage)
+- Halaman sebelumnya dihapus dari stack navigasi
+- panggunaan pushReplacement mengakibatkan user tidak bisa kembali ke halaman sebelumnya dengan tombol back karena halaman sebelumnya telah direplace dengan halaman saat ini pada stack
