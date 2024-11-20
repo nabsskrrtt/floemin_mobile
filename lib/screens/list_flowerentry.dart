@@ -91,3 +91,75 @@ class _FlowerEntryPageState extends State<FlowerEntryPage> {
     );
   }
 }
+// Detail page implementation
+class DetailItemPage extends StatelessWidget {
+  final FlowerEntry item;
+
+  const DetailItemPage({super.key, required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(item.fields.name),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Card(
+          elevation: 4.0,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.fields.name,
+                  style: const TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                _buildDetailRow("Price", "Rp${item.fields.price}"),
+                // _buildDetailRow("Time", item.fields.time),
+                _buildDetailRow("Description", item.fields.description),
+                _buildDetailRow("Stocks", "${item.fields.stocks} units"),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 16.0,
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 4.0),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 18.0,
+            ),
+          ),
+          const Divider(),
+        ],
+      ),
+    );
+  }
+}
