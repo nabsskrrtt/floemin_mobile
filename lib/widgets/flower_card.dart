@@ -1,3 +1,4 @@
+import 'package:floemin/screens/list_flowerentry.dart';
 import 'package:flutter/material.dart';
 import 'package:floemin/screens/flowerentry_form.dart';
 
@@ -40,6 +41,12 @@ class ItemCard extends StatelessWidget {
               MaterialPageRoute(
                       builder: (context) => const FlowerEntryFormPage(),
                     ));
+          } else if (item.name == "Lihat Bunga") {
+                  Navigator.push(context,
+                MaterialPageRoute(
+                    builder: (context) => const FlowerEntryPage()
+                ),
+            );
           }
         },
         // Container untuk menyimpan Icon dan Text

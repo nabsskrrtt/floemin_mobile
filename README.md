@@ -108,3 +108,39 @@ yang terjadi pada blok kode ini adalah:
 - Mengganti halaman saat ini dengan halaman baru (MyHomePage)
 - Halaman sebelumnya dihapus dari stack navigasi
 - panggunaan pushReplacement mengakibatkan user tidak bisa kembali ke halaman sebelumnya dengan tombol back karena halaman sebelumnya telah direplace dengan halaman saat ini pada stack
+
+## Tugas 9: Integrasi Layanan Web Django dengan Aplikasi Flutter
+
+1. Jelaskan mengapa kita perlu membuat model untuk melakukan pengambilan ataupun pengiriman data JSON? Apakah akan terjadi error jika kita tidak membuat model terlebih dahulu?
+- Model membantu mengkonversi data JSON ke objek Dart agar mudah dimanipulasi
+- Tanpa model bisa terjadi error parsing atau kesulitan mengakses data
+- Model juga membantu validasi tipe data
+
+2. Jelaskan fungsi dari library http yang sudah kamu implementasikan pada tugas ini
+- Digunakan untuk melakukan HTTP request (GET, POST, dll) ke server
+- Memungkinkan komunikasi antara Flutter dan Django backend
+
+3. Jelaskan fungsi dari CookieRequest dan jelaskan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter.
+- Mengelola session dan cookies untuk autentikasi
+- Dibagikan ke semua komponen agar status login konsisten di seluruh aplikasi
+- Menggunakan provider untuk state management
+
+4. Jelaskan mekanisme pengiriman data mulai dari input hingga dapat ditampilkan pada Flutter.
+- User input data di form Flutter
+- Data dikonversi ke JSON
+- Dikirim ke Django via HTTP request
+- Response dari Django diproses
+- Ditampilkan di UI Flutter
+
+5. Jelaskan mekanisme autentikasi dari login, register, hingga logout. Mulai dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.
+- Login/Register: Input credentials → kirim ke Django → Django validasi → kirim response
+- Django membuat session/token
+- Flutter menyimpan cookie/token untuk requests selanjutnya
+- Logout: Hapus session di Django dan cookie di Flutter
+
+6. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial). jawablah pertanyaan ini, singkat saja
+- Buat model sesuai struktur JSON
+- Implementasi provider untuk CookieRequest
+- Buat form input di Flutter
+- Hubungkan dengan endpoint Django
+- Handle response dan update UI

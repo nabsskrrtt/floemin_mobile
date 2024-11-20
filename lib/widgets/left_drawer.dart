@@ -1,3 +1,4 @@
+import 'package:floemin/screens/list_flowerentry.dart';
 import 'package:flutter/material.dart';
 import 'package:floemin/screens/menu.dart';
 import 'package:floemin/screens/flowerentry_form.dart';
@@ -60,6 +61,17 @@ class LeftDrawer extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => const FlowerEntryFormPage(),
                     ));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.add_reaction_rounded),
+              title: const Text('Daftar Mood'),
+              onTap: () {
+                  // Route menu ke halaman mood
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const FlowerEntryPage()),
+                  );
               },
             ),
         ],
