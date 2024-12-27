@@ -1,9 +1,10 @@
-import 'package:floemin/models/flower_entry.dart';
+import 'package:floemin/screens/flower_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:floemin/models/flower_entry.dart';
 import 'package:floemin/widgets/left_drawer.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:floemin/screens/flower_detail_page.dart';
 
 class FlowerEntryPage extends StatefulWidget {
   const FlowerEntryPage({super.key});
@@ -14,17 +15,19 @@ class FlowerEntryPage extends StatefulWidget {
 
 class _FlowerEntryPageState extends State<FlowerEntryPage> {
   Future<List<FlowerEntry>> fetchFlower(CookieRequest request) async {
-    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+    if (request.jsonData['user_id'] == null) {
+        final userResponse = await request.get('http://127.0.0.1:8000/auth/get_user/');
+        request.jsonData['user_id'] = userResponse['id'];
+    }
     final response = await request.get('http://127.0.0.1:8000/json/');
-    
-    // Melakukan decode response menjadi bentuk json
     var data = response;
-    
-    // Melakukan konversi data json menjadi object FlowerEntry
     List<FlowerEntry> listFlower = [];
     for (var d in data) {
       if (d != null) {
-        listFlower.add(FlowerEntry.fromJson(d));
+        var flower = FlowerEntry.fromJson(d);
+        if (flower.fields.user == request.jsonData['user_id']) {
+          listFlower.add(flower);
+        }
       }
     }
     return listFlower;
@@ -35,130 +38,118 @@ class _FlowerEntryPageState extends State<FlowerEntryPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flower Entry List'),
+        title: const Text(
+          'Flower Entry List',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.deepPurple,
       ),
       drawer: const LeftDrawer(),
-      body: FutureBuilder(
-        future: fetchFlower(request),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (!snapshot.hasData) {
-              return const Column(
-                children: [
-                  Text(
-                    'Belum ada data bunga pada floemin mobile',
-                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
-                  ),
-                  SizedBox(height: 8),
-                ],
-              );
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.deepPurple, Colors.white],
+          ),
+        ),
+        child: FutureBuilder(
+          future: fetchFlower(request),
+          builder: (context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              return const Center(child: CircularProgressIndicator());
             } else {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) => Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${snapshot.data![index].fields.name}",
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+              if (!snapshot.hasData) {
+                return const Column(
+                  children: [
+                    Text(
+                      'Belum ada data bunga pada floemin mobile',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color(0xff59A5D8),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                  ],
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (_, index) => GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FlowerDetailPage(
+                            flower: snapshot.data![index],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${snapshot.data![index].fields.name}",
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.pink[50],
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                "Rp${snapshot.data![index].fields.price}",
+                                style: TextStyle(color: Colors.pink[700]),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              "${snapshot.data![index].fields.description}",
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Icon(Icons.inventory_2, color: Colors.grey[600]),
+                                const SizedBox(width: 5),
+                                Text(
+                                  "${snapshot.data![index].fields.stocks}",
+                                  style: TextStyle(color: Colors.grey[600]),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.price}"),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.time}"),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.description}"),
-                      const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.stocks}")
-                    ],
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             }
-          }
-        },
-      ),
-    );
-  }
-}
-// Detail page implementation
-class DetailItemPage extends StatelessWidget {
-  final FlowerEntry item;
-
-  const DetailItemPage({super.key, required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(item.fields.name),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          },
         ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Card(
-          elevation: 4.0,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.fields.name,
-                  style: const TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                _buildDetailRow("Price", "Rp${item.fields.price}"),
-                // _buildDetailRow("Time", item.fields.time),
-                _buildDetailRow("Description", item.fields.description),
-                _buildDetailRow("Stocks", "${item.fields.stocks} units"),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDetailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 16.0,
-              color: Colors.grey,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 18.0,
-            ),
-          ),
-          const Divider(),
-        ],
       ),
     );
   }

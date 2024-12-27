@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final flowerEntry = flowerEntryFromJson(jsonString);
-
 import 'dart:convert';
 
 List<FlowerEntry> flowerEntryFromJson(String str) => List<FlowerEntry>.from(json.decode(str).map((x) => FlowerEntry.fromJson(x)));

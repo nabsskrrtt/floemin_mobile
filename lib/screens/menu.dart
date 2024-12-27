@@ -1,6 +1,10 @@
+import 'package:floemin/screens/list_flowerentry.dart';
+import 'package:floemin/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:floemin/screens/flowerentry_form.dart';
 import 'package:floemin/widgets/left_drawer.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -116,7 +120,7 @@ class ItemCard extends StatelessWidget {
       
       child: InkWell(
         // Aksi ketika kartu ditekan.
-        onTap: () {
+        onTap: () async {
           // Menampilkan pesan SnackBar saat kartu ditekan.
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -129,6 +133,33 @@ class ItemCard extends StatelessWidget {
               MaterialPageRoute(
                       builder: (context) => const FlowerEntryFormPage(),
                     ));
+          } else if (item.name == "Lihat Daftar Bunga") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const FlowerEntryPage()
+                ),
+            );
+          } else if (item.name == "Logout") {
+            final request = context.read<CookieRequest>();
+            final response = await request.logout(
+                "http://127.0.0.1:8000/auth/logout/");
+            String message = response["message"];
+            if (response['status']) {
+              String uname = response["username"];
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("$message Sampai jumpa, $uname."),
+              ));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+              );
+              
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(message),
+              ));
+            }
           }
         },
         // Container untuk menyimpan Icon dan Text

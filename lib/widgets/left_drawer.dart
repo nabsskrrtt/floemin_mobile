@@ -52,7 +52,7 @@ class LeftDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.list),
+              leading: const Icon(Icons.add),
               title: const Text('Tambah Bunga'),
               // Bagian redirection ke FlowerEntryFormPage
               onTap: () {
@@ -64,8 +64,8 @@ class LeftDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.add_reaction_rounded),
-              title: const Text('Daftar Mood'),
+              leading: const Icon(Icons.list),
+              title: const Text('Daftar Bunga'),
               onTap: () {
                   // Route menu ke halaman mood
                   Navigator.push(
